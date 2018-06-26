@@ -1,0 +1,27 @@
+module.exports.getUser = (callback, limit) => {
+    Register.find(callback).limit(limit);
+}
+
+module.exports.registerUser = function(username, details, options, callback) {
+    console.log('Updating User Account');
+    console.log('username = ',username);
+    console.log('details = ',details);
+
+	var query = {username : username};
+ //   var password = details.password;
+	bcrypt.genSalt(10, function(err, salt) {
+		bcrypt.hash(details.password, salt, function(err, hash) {
+            details.password = hash;
+            details.save(callback);
+			});
+        }); 
+     var update = {
+//         username : details.username,
+         password : details.password,
+         registerdate: details.registerdate,
+         passwordexpdate: details.passwordexpdate
+     };
+	console.log('update = ',details);
+	Register.findOneAndUpdate(query, update, options, callback);	
+//	console.log('Account Updated'); 
+} 
